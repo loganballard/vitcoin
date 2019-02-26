@@ -1,0 +1,14 @@
+{
+  "name": "vitcoin",
+  "version": "1.0.0",
+  "description": "a really dumb crypto currency simulation",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "logan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
