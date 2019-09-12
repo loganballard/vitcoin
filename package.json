@@ -1,14 +1,19 @@
 {
-  "name": "vitcoin",
+  "name": "simple",
   "version": "1.0.0",
-  "description": "a really dumb crypto currency simulation",
+  "description": "simple backend web server to route api dat",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "nodemon index.js"
   },
-  "author": "logan",
+  "author": "l",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4"
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^1.19.2",
+    "pg": "^7.12.1"
   }
 }
