@@ -1,4 +1,6 @@
 const Pool = require('pg').Pool;
+const bcrypt = require('bcrypt');
+const salt_rounds = 10;
 const conn_pool = new Pool({
    user: 'admin',
    host: 'localhost',
@@ -7,29 +9,63 @@ const conn_pool = new Pool({
    port: 5432
 });
 
-const login_query = 'SELECT * FROM users WHERE name = $1 AND passhash = $2;';
+const login_query = 'SELECT * FROM users WHERE name = $1';
+const create_user_query = 'INSERT INTO users (name, passhash) VALUES ($1, $2);';
 
-function login_with_name_and_pass (req, res, next) {
+exports.login_with_name_and_pass = function (req, res, next) {
     const name = req.body.user;
     const pass = req.body.password;
 
-    conn_pool.query(login_query, [name, pass])
+    conn_pool.query(login_query, [name])
         .then(results => {
             if (results.rows.length > 0) {
-                req.body.id = results.rows[0].id;
-                next();
-            } else {
-                return res.status(401).json({
-                    message: "user not found"
-                });
-            }
+                bcrypt.compare(pass, results.rows[0].passhash)
+                    .then(compare_result => {
+                        if (compare_result === true) {
+                            req.body.id = results.rows[0].id;
+                            next();
+                        } else {
+                            return res.status(401).json({
+                                message: "password incorrect"
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        throw err
+                    });
+            } else throw new Error();
         })
         .catch(err => {
             return res.status(401).json({
-                err: err,
+                err: err || null,
                 message: "user not found"
             });
         });
 }
 
-module.exports = login_with_name_and_pass;
+exports.create_new_user = function (req, res, next) {
+    const name = req.body.user;
+    const pass = req.body.password;
+
+    bcrypt.hash(pass, salt_rounds)
+        .then(hash_pass => {
+            conn_pool.query(create_user_query, [name, hash_pass])
+                .then(results => {
+                    req.body.id = 2;
+                    console.log(results.rows[0]);
+                    next();
+                })
+                .catch(err => {
+                    return res.status(500).json({
+                        err: err,
+                        message: "something went wrong"
+                    });
+                });
+        })
+        .catch(err => {
+            return res.status(500).json({
+                err: err,
+                message: "something went wrong"
+            });
+        });
+}

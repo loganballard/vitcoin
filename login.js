@@ -15,7 +15,7 @@ exports.login = function (req, res, next) {
 }
 
 exports.issue_token = function (req, res) {
-    let token = jwt.sign(req.body.id, jwt_key);
+    let token = jwt.sign({id: req.body.id}, jwt_key);
     res.status(200).json({
         token: token,
         message: "successfully logged in!"
