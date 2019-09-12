@@ -24,7 +24,7 @@ app.post('/auth', jsonParser, verify_token, (req, res) => {
 
 app.post('/newUser', jsonParser, db_functions.create_new_user, login.issue_token, (req, res) => {
     console.log(req.body);
-    res.send("new user!");
+    res.send();
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

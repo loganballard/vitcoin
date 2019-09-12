@@ -1,7 +1,7 @@
 'use strict';
 
 const jwt = require('jsonwebtoken');
-const jwt_key = "asdf";
+const config = require('./config/config');
 
 function verify_token(req, res, next) {
     let token = req.headers['x-access-token'];
@@ -11,14 +11,13 @@ function verify_token(req, res, next) {
             message: "no token provided"
         })
     }
-    jwt.verify(token, jwt_key, (err, decoded) => {
+    jwt.verify(token, config.jwt_key, (err, decoded) => {
         if (err) {
             return res.status(400).json({
                 err: err,
                 message: "bad token provided"
-            })
+            });
         }
-        console.log(decoded.id);
         next();
     });
 }

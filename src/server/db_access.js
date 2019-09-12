@@ -1,16 +1,16 @@
 const Pool = require('pg').Pool;
 const bcrypt = require('bcrypt');
-const salt_rounds = 10;
+const config = require('./config/config');
 const conn_pool = new Pool({
-   user: 'admin',
-   host: 'localhost',
-   password: 'admin',
-   database: 'api',
-   port: 5432
+   user: config.db_username,
+   password: config.db_password,
+   host: config.db_host,
+   database: config.db_database,
+   port: config.db_port
 });
 
 const login_query = 'SELECT * FROM users WHERE name = $1';
-const create_user_query = 'INSERT INTO users (name, passhash) VALUES ($1, $2);';
+const create_user_query = 'INSERT INTO users (name, passhash) VALUES ($1, $2) RETURNING id;';
 
 exports.login_with_name_and_pass = function (req, res, next) {
     const name = req.body.user;
@@ -57,12 +57,11 @@ exports.create_new_user = function (req, res, next) {
     const name = req.body.user;
     const pass = req.body.password;
 
-    bcrypt.hash(pass, salt_rounds)
+    bcrypt.hash(pass, config.salt_rounds)
         .then(hash_pass => {
             conn_pool.query(create_user_query, [name, hash_pass])
                 .then(results => {
-                    req.body.id = 2;
-                    console.log(results.rows[0]);
+                    req.body.id = results.rows[0].id;
                     next();
                 })
                 .catch(err => {

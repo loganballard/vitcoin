@@ -1,11 +1,11 @@
 {
   "name": "simple",
   "version": "1.0.0",
-  "description": "simple backend web server to route api dat",
+  "description": "as of right now, simple login app",
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "start": "nodemon index.js"
+    "start": "nodemon ./src/server/index.js"
   },
   "author": "l",
   "license": "ISC",

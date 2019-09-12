@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const jwt_key = "asdf";
+const config = require('./config/config');
 
 exports.login = function (req, res, next) {
     let user = req.body.user;
@@ -14,10 +14,11 @@ exports.login = function (req, res, next) {
     }
 }
 
-exports.issue_token = function (req, res) {
-    let token = jwt.sign({id: req.body.id}, jwt_key);
+exports.issue_token = function (req, res, next) {
+    let token = jwt.sign({id: req.body.id}, config.jwt_key);
     res.status(200).json({
         token: token,
         message: "successfully logged in!"
     });
+    next();
 }
