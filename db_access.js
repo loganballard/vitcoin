@@ -15,6 +15,7 @@ const create_user_query = 'INSERT INTO users (name, passhash) VALUES ($1, $2);';
 exports.login_with_name_and_pass = function (req, res, next) {
     const name = req.body.user;
     const pass = req.body.password;
+    let message = "login unsuccessful";
 
     conn_pool.query(login_query, [name])
         .then(results => {
@@ -26,19 +27,28 @@ exports.login_with_name_and_pass = function (req, res, next) {
                             next();
                         } else {
                             return res.status(401).json({
-                                message: "password incorrect"
+                                message: message,
+                                err: "password incorrect"
                             });
                         }
                     })
                     .catch(err => {
-                        throw err
+                        return res.status(401).json({
+                            message: message,
+                            err: "user not found"
+                        });
                     });
-            } else throw new Error();
+            } else {
+                return res.status(401).json({
+                    message: message,
+                    err: "user not found"
+                });
+            }
         })
         .catch(err => {
             return res.status(401).json({
-                err: err || null,
-                message: "user not found"
+                message: message,
+                err: err || null
             });
         });
 }
