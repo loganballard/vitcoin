@@ -28,3 +28,5 @@ app.post('/newUser', jsonParser, db_functions.create_new_user, login.issue_token
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+module.exports = app; // for testing

@@ -1,7 +1,7 @@
 'use strict';
 
 const jwt = require('jsonwebtoken');
-const config = require('./config/config');
+const config = (process.env.NODE_ENV === 'test') ? require('./config/test_config') : require('./config/config');
 
 function verify_token(req, res, next) {
     let token = req.headers['x-access-token'];
