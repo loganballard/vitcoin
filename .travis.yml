@@ -5,9 +5,11 @@ services:
   - docker
 
 before_install:
-  - npm i --save
+  - npm i
+  - npm run-script test-setup
 
 script:
-  - npm run-script test-setup
   - npm test
+
+after_script:
   - npm run-script test-teardown
