@@ -1,1 +1,13 @@
-language: node.js
+language: node_js
+node_js:
+  - "node"
+services:
+  - docker
+
+before_install:
+  - npm i --save
+
+script:
+  - npm run-script test-setup
+  - npm test
+  - npm run-script test-teardown
