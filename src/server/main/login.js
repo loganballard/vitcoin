@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = (process.env.NODE_ENV === 'test') ? require('./config/test_config') : require('./config/config');
 
-exports.login = function (req, res, next) {
+exports.check_user_pass_data = function (req, res, next) {
     let user = req.body.user;
     let plain_password = req.body.password;
 
