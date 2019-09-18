@@ -10,8 +10,8 @@ const conn_pool = new Pool({
    port: config.db_port
 });
 
-const login_query = 'SELECT * FROM users WHERE name = $1;';
-const create_user_query = 'INSERT INTO users (name, passhash) VALUES ($1, $2) RETURNING id;';
+const login_query = 'SELECT * FROM users WHERE email = $1;';
+const create_user_query = 'INSERT INTO users (email, passhash) VALUES ($1, $2) RETURNING id;';
 const new_session_query = 'INSERT INTO sessions (user_id) VALUES ($1) RETURNING id;';
 
 exports.login_with_name_and_pass = function (req, res, next) {

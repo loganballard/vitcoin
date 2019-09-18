@@ -32,6 +32,6 @@ app.post('/newSession', jsonParser, verify_token, db_functions.create_new_sessio
     res.send();
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Vitcoin server is listening on port ${port}!`));
 
 module.exports = app; // for testing
