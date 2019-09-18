@@ -156,7 +156,7 @@ describe('/logout POST', () => {
             });
     });
 
-    it('logout works with a valid token', (done) => {
+    it('logout works with a valid testing token', (done) => {
         chai.request(app)
             .post('/logout')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
@@ -166,6 +166,46 @@ describe('/logout POST', () => {
                 done();
             });
     });
+});
+
+
+describe('/newSession POST', () => {
+    it('newSession does not work with no attached token', (done) => {
+        chai.request(app)
+            .post('/newSession')
+            .set('Content-Type', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(400);
+                done();
+            });
+    });
+
+    it('newSession does not work with bad attached token', (done) => {
+        chai.request(app)
+            .post('/newSession')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'badtoken')
+            .end((err, res) => {
+                res.should.have.status(401);
+                done();
+            });
+    });
+
+    it('newSession works with correct data attached', (done) => {
+        chai.request(app)
+            .post('/newSession')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({id: 1})
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.message.should.contain("successfully created new session!");
+                res.body.token.should.not.be.null;
+                res.body.session.should.not.be.null;
+                done();
+            });
+    });
+
 });
 
 process.env.NODE_ENV = undefined;

@@ -9,11 +9,9 @@ docker run \
   -d \
   postgres
 
+sleep 3 # wait til docker-pg is up TODO figure out nonhack for this
+
 export PGPASSWORD=admin
-while [ 1 -eq 1 ]; do
-  sleep 2
-  psql -X -h localhost -p 42069 -d test-apis -U admin -c "CREATE TABLE users (ID SERIAL PRIMARY KEY, name VARCHAR(30), passhash VARCHAR(255));"
-  if [ $? -eq 0 ]; then
-    break
-  fi
-done
+psql -X -h localhost -p 42069 -d test-apis -U admin -c "CREATE TABLE users (ID SERIAL PRIMARY KEY, name VARCHAR(30), passhash VARCHAR(255));"
+psql -X -h localhost -p 42069 -d test-apis -U admin -c "CREATE TABLE sessions (id SERIAL, user_id INTEGER REFERENCES users(ID), active BOOLEAN DEFAULT 't', PRIMARY KEY (id, user_id));"
+unset PGPASSWORD

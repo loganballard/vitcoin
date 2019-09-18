@@ -27,6 +27,11 @@ app.post('/newUser', jsonParser, login.check_user_pass_data, db_functions.create
     res.send();
 });
 
+app.post('/newSession', jsonParser, verify_token, db_functions.create_new_session, (req, res) => {
+    console.log(req.body);
+    res.send();
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 module.exports = app; // for testing

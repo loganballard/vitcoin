@@ -10,8 +10,9 @@ const conn_pool = new Pool({
    port: config.db_port
 });
 
-const login_query = 'SELECT * FROM users WHERE name = $1';
+const login_query = 'SELECT * FROM users WHERE name = $1;';
 const create_user_query = 'INSERT INTO users (name, passhash) VALUES ($1, $2) RETURNING id;';
+const new_session_query = 'INSERT INTO sessions (user_id) VALUES ($1) RETURNING id;';
 
 exports.login_with_name_and_pass = function (req, res, next) {
     const name = req.body.user;
@@ -36,7 +37,7 @@ exports.login_with_name_and_pass = function (req, res, next) {
             }
         })
         .catch(err => { util.error_response(res, 401, message, err, null); });
-}
+};
 
 exports.create_new_user = function (req, res, next) {
     const name = req.body.user;
@@ -53,4 +54,21 @@ exports.create_new_user = function (req, res, next) {
                 .catch(err => { util.error_response(res, 500, message, err, null); });
         })
         .catch(err => { util.error_response(res, 500, message, err, null); });
-}
+};
+
+exports.create_new_session = function (req, res, next) {
+    const user_id = req.body.id;
+    const token = req.headers['x-access-token'];
+    if (user_id == null) return util.error_response(res, 400, "user id not supplied", "id " + user_id, token );
+    let message = "something went wrong creating the session";
+    conn_pool.query(new_session_query, [user_id])
+        .then(results => {
+                res.status(200).json({
+                    session: results.rows[0].id,
+                    token: token,
+                    message: "successfully created new session!"
+                });
+                next();
+            })
+        .catch(err => { util.error_response(res, 500, message, err, token) });
+};
