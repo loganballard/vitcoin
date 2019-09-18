@@ -12,6 +12,13 @@ const conn_pool = new Pool({
 const login_query = 'SELECT * FROM users WHERE name = $1';
 const create_user_query = 'INSERT INTO users (name, passhash) VALUES ($1, $2) RETURNING id;';
 
+function error_response(res, status, message, err) {
+    return res.status(status).json({
+        message: message,
+        err: err
+    });
+}
+
 exports.login_with_name_and_pass = function (req, res, next) {
     const name = req.body.user;
     const pass = req.body.password;
@@ -26,31 +33,15 @@ exports.login_with_name_and_pass = function (req, res, next) {
                             req.body.id = results.rows[0].id;
                             next();
                         } else {
-                            return res.status(401).json({
-                                message: message,
-                                err: "password incorrect"
-                            });
+                            return error_response(res, 401, message, "password incorrect");
                         }
                     })
-                    .catch(err => {
-                        return res.status(401).json({
-                            message: message,
-                            err: "user not found"
-                        });
-                    });
+                    .catch(err => { return error_response(res, 401, "user not found", err); });
             } else {
-                return res.status(401).json({
-                    message: message,
-                    err: "user not found"
-                });
+                return error_response(res, 401, message, "user not found");
             }
         })
-        .catch(err => {
-            return res.status(401).json({
-                message: message,
-                err: err || null
-            });
-        });
+        .catch(err => { return error_response(res, 401, message, err || null); });
 }
 
 exports.create_new_user = function (req, res, next) {
@@ -64,17 +55,7 @@ exports.create_new_user = function (req, res, next) {
                     req.body.id = results.rows[0].id;
                     next();
                 })
-                .catch(err => {
-                    return res.status(500).json({
-                        err: err,
-                        message: "something went wrong"
-                    });
-                });
+                .catch(err => { return error_response(res, 500, "something went wrong creating user", err); });
         })
-        .catch(err => {
-            return res.status(500).json({
-                err: err,
-                message: "something went wrong"
-            });
-        });
+        .catch(err => { return error_response(res, 500, "something went wrong creating user", err); });
 }
