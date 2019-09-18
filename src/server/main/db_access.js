@@ -27,15 +27,15 @@ exports.login_with_name_and_pass = function (req, res, next) {
                             req.body.id = results.rows[0].id;
                             next();
                         } else {
-                            return util.error_response(res, 401, message, "password incorrect");
+                            return util.error_response(res, 401, message, "password incorrect", null);
                         }
                     })
-                    .catch(err => { util.error_response(res, 401, "user not found", err); });
+                    .catch(err => { util.error_response(res, 401, message, "user not found", null); });
             } else {
-                return util.error_response(res, 401, message, "user not found");
+                return util.error_response(res, 401, message, "user not found", null);
             }
         })
-        .catch(err => { util.error_response(res, 401, message, err || null); });
+        .catch(err => { util.error_response(res, 401, message, err, null); });
 }
 
 exports.create_new_user = function (req, res, next) {
@@ -50,7 +50,7 @@ exports.create_new_user = function (req, res, next) {
                     req.body.id = results.rows[0].id;
                     next();
                 })
-                .catch(err => { util.error_response(res, 500, message, err); });
+                .catch(err => { util.error_response(res, 500, message, err, null); });
         })
-        .catch(err => { util.error_response(res, 500, message, err); });
+        .catch(err => { util.error_response(res, 500, message, err, null); });
 }
