@@ -28,15 +28,15 @@ exports.login_with_name_and_pass = function (req, res, next) {
                             req.body.id = results.rows[0].id;
                             next();
                         } else {
-                            return util.error_response(res, 401, message, "password incorrect", null);
+                            return util.error_response(res, 401, message, "password incorrect");
                         }
                     })
-                    .catch(err => { util.error_response(res, 401, message, "user not found", null); });
+                    .catch(err => { util.error_response(res, 401, message, "user not found"); });
             } else {
-                return util.error_response(res, 401, message, "user not found", null);
+                return util.error_response(res, 401, message, "user not found");
             }
         })
-        .catch(err => { util.error_response(res, 401, message, err, null); });
+        .catch(err => { util.error_response(res, 401, message, err); });
 };
 
 exports.create_new_user = function (req, res, next) {
@@ -51,15 +51,15 @@ exports.create_new_user = function (req, res, next) {
                     req.body.id = results.rows[0].id;
                     next();
                 })
-                .catch(err => { util.error_response(res, 500, message, err, null); });
+                .catch(err => { util.error_response(res, 500, message, err); });
         })
-        .catch(err => { util.error_response(res, 500, message, err, null); });
+        .catch(err => { util.error_response(res, 500, message, err); });
 };
 
 exports.create_new_session = function (req, res, next) {
     const user_id = req.body.id;
     const token = req.headers['x-access-token'];
-    if (user_id == null) return util.error_response(res, 400, "user id not supplied", "id " + user_id, token );
+    if (user_id == null) return util.error_response(res, 400, "user id not supplied", "id " + user_id);
     let message = "something went wrong creating the session";
     conn_pool.query(new_session_query, [user_id])
         .then(results => {
@@ -70,5 +70,5 @@ exports.create_new_session = function (req, res, next) {
                 });
                 next();
             })
-        .catch(err => { util.error_response(res, 500, message, err, token) });
+        .catch(err => { util.error_response(res, 500, message, err) });
 };

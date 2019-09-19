@@ -21,8 +21,8 @@ CREATE TABLE sessionBlockTransactions (
     sessionId INTEGER REFERENCES sessions(id),
     blockNum INTEGER NOT NULL,
     transactionNum INTEGER NOT NULL,
-    fromWallet VARCHAR(255),
-    toWallet VARCHAR(255),
+    fromWallet INTEGER references walletBalance(walletId),
+    toWallet INTEGER references walletBalance(walletId),
     amount INTEGER NOT NULL,
     PRIMARY KEY (sessionId, blockNum, transactionNum)
 );
@@ -37,5 +37,6 @@ CREATE TABLE sessionWalletRel (
 -- table to store wallets and their balances
 CREATE TABLE walletBalance (
     walletId SERIAL PRIMARY KEY,
-    balance INTEGER NOT NULL
+    balance INTEGER NOT NULL,
+    walletName VARCHAR(255)
 );
