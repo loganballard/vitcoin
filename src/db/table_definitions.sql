@@ -11,8 +11,31 @@ CREATE TABLE users (
  * but for maintaining a record of whos doing what
 */
 CREATE TABLE sessions (
-    id SERIAL,
+    id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(ID),
-    active BOOLEAN DEFAULT 't',
-    PRIMARY KEY (id, user_id)
+    active BOOLEAN DEFAULT 't'
+);
+
+-- table to store transactional data (session + block + wallet <--> wallet)
+CREATE TABLE sessionBlockTransactions (
+    sessionId INTEGER REFERENCES sessions(id),
+    blockNum INTEGER NOT NULL,
+    transactionNum INTEGER NOT NULL,
+    fromWallet VARCHAR(255),
+    toWallet VARCHAR(255),
+    amount INTEGER NOT NULL,
+    PRIMARY KEY (sessionId, blockNum, transactionNum)
+);
+
+-- table to store session <---> wallet balance info
+CREATE TABLE sessionWalletRel (
+    sessionId INTEGER REFERENCES sessions(id),
+    walletId INTEGER REFERENCES walletBalance(walletId),
+    PRIMARY KEY (sessionId, walletId)
+);
+
+-- table to store wallets and their balances
+CREATE TABLE walletBalance (
+    walletId SERIAL PRIMARY KEY,
+    balance INTEGER NOT NULL
 );
