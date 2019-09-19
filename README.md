@@ -1,5 +1,7 @@
 # making a bitcoin simulator
 
+[![Build Status](https://travis-ci.org/loganballard/vitcoin.svg?branch=master)](https://travis-ci.org/loganballard/vitcoin)
+
 As of right now this is just a shitty login express js backend.  Need to do a bunch of stuff before it is actually useful.
 
 ### To Run (as it stands right now)
