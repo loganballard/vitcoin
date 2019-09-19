@@ -4,6 +4,10 @@ node_js:
 services:
   - docker
 
+branches:
+  only:
+    - master
+
 before_install:
   - npm i
   - npm run-script test-setup
@@ -13,3 +17,4 @@ script:
 
 after_script:
   - npm run-script test-teardown
+
