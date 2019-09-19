@@ -8,7 +8,7 @@ const port = 3000;
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
-app.post('/login', jsonParser, login.login, db_functions.login_with_name_and_pass, login.issue_token, (req, res) => {
+app.post('/login', jsonParser, login.check_user_pass_data, db_functions.login_with_name_and_pass, login.issue_token, (req, res) => {
     console.log('login');
 });
 
@@ -22,9 +22,16 @@ app.post('/auth', jsonParser, verify_token, (req, res) => {
     res.send("authorized!");
 });
 
-app.post('/newUser', jsonParser, db_functions.create_new_user, login.issue_token, (req, res) => {
+app.post('/newUser', jsonParser, login.check_user_pass_data, db_functions.create_new_user, login.issue_token, (req, res) => {
     console.log(req.body);
     res.send();
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.post('/newSession', jsonParser, verify_token, db_functions.create_new_session, (req, res) => {
+    console.log(req.body);
+    res.send();
+});
+
+app.listen(port, () => console.log(`Vitcoin server is listening on port ${port}!`));
+
+module.exports = app; // for testing
