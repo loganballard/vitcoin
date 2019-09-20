@@ -4,8 +4,8 @@
   "description": "as of right now, simple login app",
   "main": "index.js",
   "scripts": {
-    "test-setup": "./src/server/test/init_db.sh",
-    "test": "./node_modules/.bin/mocha ./src/server/test --exit",
+    "test-setup": "./src/server/test/init_test_db.sh",
+    "test": "./src/server/test/init_test_db.sh; ./node_modules/.bin/mocha ./src/server/test --exit; docker rm -f test-api-in-container",
     "test-teardown": "docker rm -f test-api-in-container",
     "start": "nodemon src/server/main/index.js"
   },
@@ -17,7 +17,8 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^1.19.2",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "pg-format": "^1.0.4"
   },
   "devDependencies": {
     "chai": "^4.2.0",

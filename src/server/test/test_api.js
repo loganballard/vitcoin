@@ -208,4 +208,64 @@ describe('/newSession POST', () => {
 
 });
 
+describe('/setUpScenario POST', () => {
+    it('setUpScenario does not work with no attached token', (done) => {
+        chai.request(app)
+            .post('/setUpScenario')
+            .set('Content-Type', 'application/json')
+            .end((err, res) => {
+                res.should.have.status(400);
+                done();
+            });
+    });
+
+    it('setUpScenario does not work with bad attached token', (done) => {
+        chai.request(app)
+            .post('/setUpScenario')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'badtoken')
+            .end((err, res) => {
+                res.should.have.status(401);
+                done();
+            });
+    });
+
+    it('setUpScenario fails without attached data', (done) => {
+        chai.request(app)
+            .post('/setUpScenario')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({})
+            .end((err, res) => {
+                res.should.have.status(401);
+                done();
+            });
+    });
+
+    it('setUpScenario fails without attached wallet', (done) => {
+        chai.request(app)
+            .post('/setUpScenario')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({startingBalance: 10})
+            .end((err, res) => {
+                res.should.have.status(401);
+                done();
+            });
+    });
+
+    it('setUpScenario fails without attached balance', (done) => {
+        chai.request(app)
+            .post('/setUpScenario')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({walletNum: 10})
+            .end((err, res) => {
+                res.should.have.status(401);
+                done();
+            });
+    });
+
+});
+
 process.env.NODE_ENV = undefined;

@@ -13,9 +13,14 @@ As of right now this is just a shitty login express js backend.  Need to do a bu
 5. spin it up with `npm start`
 
 ## To Test
-1. `npm run-script test-setup` (mac/linux only, windows no go)
-2. `npm test`
+MacOS/Linux:
+1. `npm test`
+
+Windows: 
+1. Spin up a docker instance according to the script in `./src/server/main/test/init_test_db.sh` (this sucks I know)
+2. `./node_modules/.bin/mocha  ./src/server/test --exit`
 3. `npm run-script test-teardown`
+4. Contemplate why windows has stupid powershell
 
 ## To do
 

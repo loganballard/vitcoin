@@ -3,6 +3,7 @@ const jsonParser = require('body-parser').json();
 const verify_token = require('./verify_token');
 const login = require('./login');
 const db_functions = require('./db_access');
+const util = require('./util');
 const app = express();
 const port = 3000;
 
@@ -28,6 +29,11 @@ app.post('/newUser', jsonParser, login.check_user_pass_data, db_functions.create
 });
 
 app.post('/newSession', jsonParser, verify_token, db_functions.create_new_session, (req, res) => {
+    console.log(req.body);
+    res.send();
+});
+
+app.post('/setUpScenario', jsonParser, verify_token, util.check_setup_vars, (req, res) => {
     console.log(req.body);
     res.send();
 });
