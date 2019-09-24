@@ -100,18 +100,11 @@ exports.add_wallets_to_db = function (req, res, next) {
         .catch(err => { util.error_response(res, 500, "Database error adding wallet information", err) });
 };
 
-function makeListOfTransactionsFromReqBody(sessionId, blockNum, transactionList) {
-    let listOfTransactions = [];
-    let transNo = 0;
-    transactionList.forEach(trans => { listOfTransactions.push([sessionId, blockNum, transNo++, trans.from, trans.to, trans.amount]) });
-    return listOfTransactions;
-}
-
 exports.add_transaction_to_db = function (req, res, next) {
     const sessionId = req.body.sessionId;
     const blockNum = req.body.blockNum;
     const token = req.headers['x-access-token'];
-    const listOfTransactions = makeListOfTransactionsFromReqBody(sessionId, blockNum, req.body.transactions);
+    const listOfTransactions = util.make_list_of_transactions_from_req_body(sessionId, blockNum, req.body.transactions);
     const query = format(add_transaction_query_template, listOfTransactions);
     conn_pool.query(query)
         .then(results => {

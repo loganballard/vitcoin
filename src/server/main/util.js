@@ -25,8 +25,17 @@ function check_transaction_vars (req, res, next) {
     else return error_response(res, 401, "must specify sessionId, and list of transactions in form: {to: int, from: int, amount: int}", "error in adding transaction");
 };
 
+
+function make_list_of_transactions_from_req_body(sessionId, blockNum, transactionList) {
+    let listOfTransactions = [];
+    let transNo = 0;
+    transactionList.forEach(trans => { listOfTransactions.push([sessionId, blockNum, transNo++, trans.from, trans.to, trans.amount]) });
+    return listOfTransactions;
+}
+
 module.exports = {
     error_response,
     check_setup_vars,
-    check_transaction_vars
+    check_transaction_vars,
+    make_list_of_transactions_from_req_body
 };
