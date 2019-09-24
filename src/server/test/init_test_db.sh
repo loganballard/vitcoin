@@ -29,8 +29,8 @@ psql -X -h localhost -p 42069 -d test-apis -U admin -c \
 psql -X -h localhost -p 42069 -d test-apis -U admin -c \
 "CREATE TABLE walletBalance (
     walletId SERIAL PRIMARY KEY,
-    balance INTEGER NOT NULL,
-    walletName VARCHAR(255)
+    sessionId INTEGER REFERENCES sessions(id),
+    balance INTEGER NOT NULL
 );"
 psql -X -h localhost -p 42069 -d test-apis -U admin -c \
 "CREATE TABLE sessionBlockTransactions (
@@ -41,12 +41,6 @@ psql -X -h localhost -p 42069 -d test-apis -U admin -c \
     toWallet INTEGER references walletBalance(walletId),
     amount INTEGER NOT NULL,
     PRIMARY KEY (sessionId, blockNum, transactionNum)
-);"
-psql -X -h localhost -p 42069 -d test-apis -U admin -c \
-"CREATE TABLE sessionWalletRel (
-    sessionId INTEGER REFERENCES sessions(id),
-    walletId INTEGER REFERENCES walletBalance(walletId),
-    PRIMARY KEY (sessionId, walletId)
 );"
 
 unset PGPASSWORD

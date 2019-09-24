@@ -10,31 +10,35 @@ const port = 3000;
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.post('/login', jsonParser, login.check_user_pass_data, db_functions.login_with_name_and_pass, login.issue_token, (req, res) => {
-    console.log('login');
+    //console.log('login');
 });
 
 app.post('/logout', jsonParser, verify_token, (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     res.send("logout");
 });
 
 app.post('/auth', jsonParser, verify_token, (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     res.send("authorized!");
 });
 
 app.post('/newUser', jsonParser, login.check_user_pass_data, db_functions.create_new_user, login.issue_token, (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     res.send();
 });
 
 app.post('/newSession', jsonParser, verify_token, db_functions.create_new_session, (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     res.send();
 });
 
-app.post('/setUpScenario', jsonParser, verify_token, util.check_setup_vars, (req, res) => {
-    console.log(req.body);
+app.post('/setUpScenario', jsonParser, verify_token, util.check_setup_vars, db_functions.add_wallets_to_db, (req, res) => {
+    //console.log(req.body);
+    res.send();
+});
+
+app.post('/addTransactions', jsonParser, verify_token, util.check_transaction_vars, db_functions.add_transaction_to_db, (req, res) => {
     res.send();
 });
 
