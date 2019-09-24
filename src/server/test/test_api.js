@@ -551,7 +551,7 @@ describe('/addTransactions POST', () => {
             });
     });
 
-    it('addTransactions fails with duplicate transaction information', done => {
+    it('addTransactions fails with duplicate transaction or nonexistant wallet information', done => {
 
         // ensure new user
         chai.request(app)
@@ -592,6 +592,28 @@ describe('/addTransactions POST', () => {
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({sessionId: 1, blockNum: 1, transactions: [{to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}] })
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.message.should.not.be.null;
+                res.body.message.should.contain("Database error adding transaction information");
+            });
+
+        chai.request(app)
+            .post('/addTransactions')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({sessionId: 1, blockNum: 1, transactions: [{to: -1, from: 1, amount: 1}] })
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.message.should.not.be.null;
+                res.body.message.should.contain("Database error adding transaction information");
+            });
+
+        chai.request(app)
+            .post('/addTransactions')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({sessionId: 1, blockNum: 1, transactions: [{to: 100000, from: 1, amount: 1}] })
             .end((err, res) => {
                 res.should.have.status(500);
                 res.body.message.should.not.be.null;

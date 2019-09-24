@@ -113,7 +113,6 @@ exports.add_transaction_to_db = function (req, res, next) {
     const token = req.headers['x-access-token'];
     const listOfTransactions = makeListOfTransactionsFromReqBody(sessionId, blockNum, req.body.transactions);
     const query = format(add_transaction_query_template, listOfTransactions);
-    console.log(query);
     conn_pool.query(query)
         .then(results => {
             res.status(200).json({
