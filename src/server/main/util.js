@@ -8,10 +8,8 @@ function error_response (res, status, message, err) {
 };
 
 function check_setup_vars (req, res, next) {
-    let num_of_wallets = req.body.walletNum;
-    let starting_balance = req.body.startingBalance;
-    if (num_of_wallets != null && starting_balance != null) next();
-    return error_response(res, 401, "must specify wallet num and starting balance", null);
+    if (req.body.walletNum != null && req.body.startingBalance != null && req.body.sessionId != null) next();
+    else return error_response(res, 401, "must specify session id, wallet num, starting balance", null);
 };
 
 module.exports = {

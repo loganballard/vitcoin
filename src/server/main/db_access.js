@@ -1,5 +1,6 @@
 const Pool = require('pg').Pool;
 const bcrypt = require('bcrypt');
+const format = require('pg-format');
 const config = (process.env.NODE_ENV === 'test') ? require('./config/test_config') : require('./config/config');
 const util = require('./util');
 const conn_pool = new Pool({
@@ -13,6 +14,7 @@ const conn_pool = new Pool({
 const login_query = 'SELECT * FROM users WHERE email = $1;';
 const create_user_query = 'INSERT INTO users (email, passhash) VALUES ($1, $2) RETURNING id;';
 const new_session_query = 'INSERT INTO sessions (user_id) VALUES ($1) RETURNING id;';
+const add_wallet_session_query_template = "INSERT INTO walletBalance (sessionId, balance) VALUES %L RETURNING walletId;";
 
 exports.login_with_name_and_pass = function (req, res, next) {
     const name = req.body.user;
@@ -71,4 +73,25 @@ exports.create_new_session = function (req, res, next) {
                 next();
             })
         .catch(err => { util.error_response(res, 500, message, err) });
+};
+
+exports.add_wallets_to_db = function (req, res, next) {
+    const num_of_wallets = req.body.walletNum;
+    const starting_balance = req.body.startingBalance;
+    const session_id = req.body.sessionId;
+    const token = req.headers['x-access-token'];
+    let wallet_vals = [];
+    [...Array(num_of_wallets)].map(() => wallet_vals.push([session_id, starting_balance]));
+    let query = format(add_wallet_session_query_template, wallet_vals);
+
+    conn_pool.query(query)
+        .then(results => {
+            res.status(200).json({
+                wallets: results.rows,
+                token: token,
+                message: "successfully added new wallets!"
+            });
+            next();
+        })
+        .catch(err => { util.error_response(res, 500, "Database error adding wallet information", err) });
 };

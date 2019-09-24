@@ -33,7 +33,7 @@ app.post('/newSession', jsonParser, verify_token, db_functions.create_new_sessio
     res.send();
 });
 
-app.post('/setUpScenario', jsonParser, verify_token, util.check_setup_vars, (req, res) => {
+app.post('/setUpScenario', jsonParser, verify_token, util.check_setup_vars, db_functions.add_wallets_to_db, (req, res) => {
     console.log(req.body);
     res.send();
 });

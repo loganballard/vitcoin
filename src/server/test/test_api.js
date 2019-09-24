@@ -208,6 +208,7 @@ describe('/newSession POST', () => {
 
 });
 
+
 describe('/setUpScenario POST', () => {
     it('setUpScenario does not work with no attached token', (done) => {
         chai.request(app)
@@ -266,6 +267,92 @@ describe('/setUpScenario POST', () => {
             });
     });
 
+    it('setUpScenario fails without attached sessionId', (done) => {
+        chai.request(app)
+            .post('/setUpScenario')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({walletNum: 10, startingBalance: 10})
+            .end((err, res) => {
+                res.should.have.status(401);
+                done();
+            });
+    });
+
+    it('setUpScenario succeeds with all vars attached', (done) => {
+        // ensure new user
+        chai.request(app)
+            .post('/newUser')
+            .set('Content-Type', 'application/json')
+            .send({user: "realuserwallet", password: "realpassword"})
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.message.should.contain('successfully logged in');
+                res.body.token.should.not.be.null;
+            });
+
+        // ensure new session
+        chai.request(app)
+            .post('/newSession')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({id: 1})
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.message.should.contain("successfully created new session!");
+                res.body.token.should.not.be.null;
+                res.body.session.should.not.be.null;
+            });
+
+        chai.request(app)
+            .post('/setUpScenario')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({walletNum: 10, startingBalance: 10, sessionId: 1})
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+    });
+
+    it('setUpScenario returns correct amount of wallets', (done) => {
+        // ensure new user
+        chai.request(app)
+            .post('/newUser')
+            .set('Content-Type', 'application/json')
+            .send({user: "realuserwalletcount", password: "realpassword"})
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.message.should.contain('successfully logged in');
+                res.body.token.should.not.be.null;
+            });
+
+        // ensure new session
+        chai.request(app)
+            .post('/newSession')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({id: 1})
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.message.should.contain("successfully created new session!");
+                res.body.token.should.not.be.null;
+                res.body.session.should.not.be.null;
+            });
+
+        chai.request(app)
+            .post('/setUpScenario')
+            .set('Content-Type', 'application/json')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
+            .send({walletNum: 10, startingBalance: 10, sessionId: 1})
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.wallets.should.have.property('length');
+                res.body.wallets.length.should.equal(10);
+                done();
+            });
+
+    });
 });
 
 process.env.NODE_ENV = undefined;
