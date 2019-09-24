@@ -15,6 +15,10 @@ const login_query = 'SELECT * FROM users WHERE email = $1;';
 const create_user_query = 'INSERT INTO users (email, passhash) VALUES ($1, $2) RETURNING id;';
 const new_session_query = 'INSERT INTO sessions (user_id) VALUES ($1) RETURNING id;';
 const add_wallet_session_query_template = "INSERT INTO walletBalance (sessionId, balance) VALUES %L RETURNING walletId;";
+const add_transaction_query_template = "INSERT INTO sessionBlockTransactions " +
+    "(sessionId, blockNum, transactionNum, fromWallet, toWallet, amount) VALUES" +
+    " %L";
+
 
 exports.login_with_name_and_pass = function (req, res, next) {
     const name = req.body.user;
@@ -94,4 +98,29 @@ exports.add_wallets_to_db = function (req, res, next) {
             next();
         })
         .catch(err => { util.error_response(res, 500, "Database error adding wallet information", err) });
+};
+
+function makeListOfTransactionsFromReqBody(sessionId, blockNum, transactionList) {
+    let listOfTransactions = [];
+    let transNo = 0;
+    transactionList.forEach(trans => { listOfTransactions.push([sessionId, blockNum, transNo++, trans.from, trans.to, trans.amount]) });
+    return listOfTransactions;
+}
+
+exports.add_transaction_to_db = function (req, res, next) {
+    const sessionId = req.body.sessionId;
+    const blockNum = req.body.blockNum;
+    const token = req.headers['x-access-token'];
+    const listOfTransactions = makeListOfTransactionsFromReqBody(sessionId, blockNum, req.body.transactions);
+    const query = format(add_transaction_query_template, listOfTransactions);
+    console.log(query);
+    conn_pool.query(query)
+        .then(results => {
+            res.status(200).json({
+                token: token,
+                message: "successfully added transaction(s)!"
+            });
+            next();
+        })
+        .catch(err => { util.error_response(res, 500, "Database error adding transaction information", err) });
 };
