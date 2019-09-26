@@ -6,8 +6,6 @@ const format = require('pg-format');
 const util = require('./util');
 const queries = require('../../db/queries');
 const config = (process.env.NODE_ENV === 'test') ? require('./config/test_config') : require('./config/config');
-
-
 const conn_pool = new Pool({
    user: config.db_username,
    password: config.db_password,
@@ -68,12 +66,9 @@ exports.create_new_session = function (req, res, next) {
     let message = "something went wrong creating the session";
     conn_pool.query(queries.new_session_query, [user_id])
         .then(results => {
-                res.status(200).json({
-                    session: results.rows[0].id,
-                    user_id: user_id,
-                    token: token,
-                    message: "successfully created new session!"
-                });
+                res.locals.session = results.rows[0].id;
+                res.locals.user_id = user_id;
+                res.locals.token = token;
                 next();
             })
         .catch(err => { util.error_response(res, 500, message, err) });
@@ -91,12 +86,9 @@ exports.add_wallets_to_db = function (req, res, next) {
 
     conn_pool.query(query)
         .then(results => {
-            res.status(200).json({
-                wallets: results.rows,
-                session_id: session_id,
-                token: token,
-                message: "successfully added new wallets!"
-            });
+            res.locals.wallets = results.rows;
+            res.locals.session_id = session_id;
+            res.locals.token = token;
             next();
         })
         .catch(err => { util.error_response(res, 500, "Database error adding wallet information", err) });
@@ -123,10 +115,7 @@ exports.update_wallet_balance = function (req, res, next) {
     const query = format(queries.update_wallet_balance_template, wallet_adjustment_list);
     conn_pool.query(query)
         .then(results => {
-            res.status(200).json({
-                token: token,
-                message: "successfully updated wallet balance and added transaction(s)!"
-            });
+            res.locals.token = token;
             next();
         })
         .catch(err => { util.error_response(res, 500, "Database error updating wallet information", err) });

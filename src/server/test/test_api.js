@@ -25,7 +25,7 @@ describe('/ GET', () => {
 describe('/newUser POST', () => {
     it('newUser does not work with no attached data', done => {
         chai.request(app)
-            .post('/newUser')
+            .post('/account/newUser')
             .set('Content-Type', 'application/json')
             .end((err, res) => {
                 res.should.have.status(401);
@@ -35,7 +35,7 @@ describe('/newUser POST', () => {
 
     it('new user does not work with no attached password', done => {
         chai.request(app)
-            .post('/newUser')
+            .post('/account/newUser')
             .set('Content-Type', 'application/json')
             .send({user: "asdf"})
             .end((err, res) => {
@@ -47,7 +47,7 @@ describe('/newUser POST', () => {
 
     it('new user does not work with no attached username', done => {
         chai.request(app)
-            .post('/newUser')
+            .post('/account/newUser')
             .set('Content-Type', 'application/json')
             .send({password: "asdf"})
             .end((err, res) => {
@@ -59,11 +59,12 @@ describe('/newUser POST', () => {
 
     it('new user works with correct data attached', done => {
         chai.request(app)
-            .post('/newUser')
+            .post('/account/newUser')
             .set('Content-Type', 'application/json')
             .send({user: "realuser", password: "realpassword"})
             .end((err, res) => {
                 res.should.have.status(200);
+                res.body.message.should.contain('new user');
                 res.body.message.should.contain('successfully logged in');
                 res.body.token.should.not.be.null;
                 done();
@@ -75,7 +76,7 @@ describe('/newUser POST', () => {
 describe('/login POST', () => {
    it('login does not work with no attached data', done => {
        chai.request(app)
-           .post('/login')
+           .post('/account/login')
            .set('Content-Type', 'application/json')
            .end((err, res) => {
                res.should.have.status(401);
@@ -85,7 +86,7 @@ describe('/login POST', () => {
 
     it('login does not work with no attached password', done => {
         chai.request(app)
-            .post('/login')
+            .post('/account/login')
             .set('Content-Type', 'application/json')
             .send({user: "asdf"})
             .end((err, res) => {
@@ -97,7 +98,7 @@ describe('/login POST', () => {
 
     it('login does not work with no attached username', done => {
         chai.request(app)
-            .post('/login')
+            .post('/account/login')
             .set('Content-Type', 'application/json')
             .send({password: "asdf"})
             .end((err, res) => {
@@ -109,7 +110,7 @@ describe('/login POST', () => {
 
     it('login does not work with incorrect user and password', done => {
         chai.request(app)
-            .post('/login')
+            .post('/account/login')
             .set('Content-Type', 'application/json')
             .send({password: "notReal", user: "notReal"})
             .end((err, res) => {
@@ -121,7 +122,7 @@ describe('/login POST', () => {
 
     it('login does work with correct user and password', done => {
         chai.request(app)
-            .post('/login')
+            .post('/account/login')
             .set('Content-Type', 'application/json')
             .send({password: "realpassword", user: "realuser"})
             .end((err, res) => {
@@ -136,7 +137,7 @@ describe('/login POST', () => {
 describe('/logout POST', () => {
     it('logout should not work with no token', done => {
         chai.request(app)
-            .post('/logout')
+            .post('/account/logout')
             .send({})
             .end((err, res) => {
                 res.should.have.status(400);
@@ -147,7 +148,7 @@ describe('/logout POST', () => {
 
     it('logout should not work with an invalid token', done => {
         chai.request(app)
-            .post('/logout')
+            .post('/account/logout')
             .set('x-access-token', 'asdf')
             .set('Content-Type', 'application/json')
             .end((err, res) => {
@@ -159,7 +160,7 @@ describe('/logout POST', () => {
 
     it('logout works with a valid testing token', done => {
         chai.request(app)
-            .post('/logout')
+            .post('/account/logout')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .set('Content-Type', 'application/json')
             .end((err, res) => {
@@ -173,7 +174,7 @@ describe('/logout POST', () => {
 describe('/newSession POST', () => {
     it('newSession does not work with no attached token', done => {
         chai.request(app)
-            .post('/newSession')
+            .post('/action/newSession')
             .set('Content-Type', 'application/json')
             .end((err, res) => {
                 res.should.have.status(400);
@@ -183,7 +184,7 @@ describe('/newSession POST', () => {
 
     it('newSession does not work with bad attached token', done => {
         chai.request(app)
-            .post('/newSession')
+            .post('/action/newSession')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'badtoken')
             .end((err, res) => {
@@ -194,7 +195,7 @@ describe('/newSession POST', () => {
 
     it('newSession works with correct data attached', done => {
         chai.request(app)
-            .post('/newSession')
+            .post('/action/newSession')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({id: 1})
@@ -213,7 +214,7 @@ describe('/newSession POST', () => {
 describe('/setUpScenario POST', () => {
     it('setUpScenario does not work with no attached token', done => {
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .end((err, res) => {
                 res.should.have.status(400);
@@ -223,7 +224,7 @@ describe('/setUpScenario POST', () => {
 
     it('setUpScenario does not work with bad attached token', done => {
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'badtoken')
             .end((err, res) => {
@@ -234,7 +235,7 @@ describe('/setUpScenario POST', () => {
 
     it('setUpScenario fails without attached data', done => {
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({})
@@ -246,7 +247,7 @@ describe('/setUpScenario POST', () => {
 
     it('setUpScenario fails without attached wallet', done => {
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({starting_balance: 10})
@@ -258,7 +259,7 @@ describe('/setUpScenario POST', () => {
 
     it('setUpScenario fails without attached balance', done => {
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({wallet_num: 10})
@@ -270,7 +271,7 @@ describe('/setUpScenario POST', () => {
 
     it('setUpScenario fails without attached sessionId', done => {
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({wallet_num: 10, starting_balance: 10})
@@ -283,7 +284,7 @@ describe('/setUpScenario POST', () => {
     it('setUpScenario succeeds with all vars attached', done => {
         // ensure new user
         chai.request(app)
-            .post('/newUser')
+            .post('/account/newUser')
             .set('Content-Type', 'application/json')
             .send({user: "realuserwallet", password: "realpassword"})
             .end((err, res) => {
@@ -294,7 +295,7 @@ describe('/setUpScenario POST', () => {
 
         // ensure new session
         chai.request(app)
-            .post('/newSession')
+            .post('/action/newSession')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({id: 1})
@@ -306,7 +307,7 @@ describe('/setUpScenario POST', () => {
             });
 
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({wallet_num: 10, starting_balance: 10, session_id: 1})
@@ -319,7 +320,7 @@ describe('/setUpScenario POST', () => {
     it('setUpScenario returns correct amount of wallets', done => {
         // ensure new user
         chai.request(app)
-            .post('/newUser')
+            .post('/account/newUser')
             .set('Content-Type', 'application/json')
             .send({user: "realuserwalletcount", password: "realpassword"})
             .end((err, res) => {
@@ -330,7 +331,7 @@ describe('/setUpScenario POST', () => {
 
         // ensure new session
         chai.request(app)
-            .post('/newSession')
+            .post('/action/newSession')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({id: 1})
@@ -342,7 +343,7 @@ describe('/setUpScenario POST', () => {
             });
 
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({wallet_num: 10, starting_balance: 10, session_id: 1})
@@ -361,7 +362,7 @@ describe('/addTransactions POST', () => {
 
     it('addTransactions fails without token', done => {
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .end((err, res) => {
                 res.should.have.status(400);
@@ -371,7 +372,7 @@ describe('/addTransactions POST', () => {
 
     it('addTransactions fails without sessionId', done => {
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({block_num: 0, transactions: [{to: 1, from: 1, amount: 1}]})
@@ -383,7 +384,7 @@ describe('/addTransactions POST', () => {
 
     it('addTransactions fails without block number', done => {
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, transactions: [{to: 1, from: 1, amount: 1}]})
@@ -395,7 +396,7 @@ describe('/addTransactions POST', () => {
 
     it('addTransactions fails without list of transactions', done => {
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0})
@@ -404,7 +405,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: ''})
@@ -413,7 +414,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: []})
@@ -422,7 +423,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: [] })
@@ -435,7 +436,7 @@ describe('/addTransactions POST', () => {
     it('addTransactions fails with list of incomplete transactions', done => {
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: [{}] })
@@ -444,7 +445,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: [{}, {}] })
@@ -453,7 +454,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: [{to: 1, from: 1, amount: 1}, {}] })
@@ -462,7 +463,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: [{to: 1, from: 1, amount: 1}, {} ] })
@@ -471,7 +472,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: [{},{to: 1, from: 1, amount: 1} ] })
@@ -480,7 +481,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: [{to: 1, from: 1, amount: 1}, {to: 1, from: 1}, {from: 1, amount: 1}, {amount: 1}] })
@@ -494,7 +495,7 @@ describe('/addTransactions POST', () => {
 
         // ensure new user
         chai.request(app)
-            .post('/newUser')
+            .post('/account/newUser')
             .set('Content-Type', 'application/json')
             .send({user: "realuserwallet", password: "realpassword"})
             .end((err, res) => {
@@ -505,7 +506,7 @@ describe('/addTransactions POST', () => {
 
         // ensure new session
         chai.request(app)
-            .post('/newSession')
+            .post('/action/newSession')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({id: 1})
@@ -518,7 +519,7 @@ describe('/addTransactions POST', () => {
 
         // ensure more than one wallet
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({wallet_num: 10, starting_balance: 10, session_id: 1})
@@ -527,7 +528,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 0, transactions: [{to: 1, from: 1, amount: 1}] })
@@ -540,7 +541,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 1, transactions: [{to: 1, from: 2, amount: 10}, {to: 2, from: 3, amount: 111}, {to: 3, from: 1, amount: 21}, {to: 1, from: 2, amount: 10}] })
@@ -558,7 +559,7 @@ describe('/addTransactions POST', () => {
 
         // ensure new user
         chai.request(app)
-            .post('/newUser')
+            .post('/account/newUser')
             .set('Content-Type', 'application/json')
             .send({user: "realuserwallet", password: "realpassword"})
             .end((err, res) => {
@@ -569,7 +570,7 @@ describe('/addTransactions POST', () => {
 
         // ensure new session
         chai.request(app)
-            .post('/newSession')
+            .post('/action/newSession')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({id: 1})
@@ -582,7 +583,7 @@ describe('/addTransactions POST', () => {
 
         // ensure more than one wallet
         chai.request(app)
-            .post('/setUpScenario')
+            .post('/action/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({wallet_num: 10, starting_balance: 10, session_id: 1})
@@ -591,7 +592,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 1, transactions: [{to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}] })
@@ -602,7 +603,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 1, transactions: [{to: -1, from: 1, amount: 1}] })
@@ -613,7 +614,7 @@ describe('/addTransactions POST', () => {
             });
 
         chai.request(app)
-            .post('/addTransactions')
+            .post('/action/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
             .send({session_id: 1, block_num: 1, transactions: [{to: 100000, from: 1, amount: 1}] })
