@@ -1,7 +1,6 @@
 'use strict';
-
 const jwt = require('jsonwebtoken');
-const config = (process.env.NODE_ENV === 'test') ? require('./config/test_config') : require('./config/config');
+const config = (process.env.NODE_ENV === 'test') ? require('../config/test_config') : require('../config/config');
 
 
 function error_response (res, status, message, err) {
