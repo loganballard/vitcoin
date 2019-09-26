@@ -72,13 +72,10 @@ function get_transaction_difference(list_of_trans) {
 }
 
 
-function issue_token (req, res, next) {
+function issue_token(req, res, next) {
     let token = jwt.sign({id: req.body.id}, config.jwt_key);
-    res.status(200).json({
-        token: token,
-        user_id: req.body.id,
-        message: "successfully logged in!"
-    });
+    res.locals.token = token;
+    res.locals.user_id = req.body.id;
     next();
 }
 
