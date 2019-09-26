@@ -70,6 +70,7 @@ exports.create_new_session = function (req, res, next) {
         .then(results => {
                 res.status(200).json({
                     session: results.rows[0].id,
+                    user_id: user_id,
                     token: token,
                     message: "successfully created new session!"
                 });
@@ -92,6 +93,7 @@ exports.add_wallets_to_db = function (req, res, next) {
         .then(results => {
             res.status(200).json({
                 wallets: results.rows,
+                session_id: session_id,
                 token: token,
                 message: "successfully added new wallets!"
             });
