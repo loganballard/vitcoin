@@ -81,9 +81,9 @@ exports.create_new_session = function (req, res, next) {
 
 
 exports.add_wallets_to_db = function (req, res, next) {
-    const num_of_wallets = req.body.walletNum;
-    const starting_balance = req.body.startingBalance;
-    const session_id = req.body.sessionId;
+    const num_of_wallets = req.body.wallet_num;
+    const starting_balance = req.body.starting_balance;
+    const session_id = req.body.session_id;
     const token = req.headers['x-access-token'];
     let wallet_vals = [];
     [...Array(num_of_wallets)].map(() => wallet_vals.push([session_id, starting_balance]));
@@ -104,11 +104,11 @@ exports.add_wallets_to_db = function (req, res, next) {
 
 
 exports.add_transaction_to_db = function (req, res, next) {
-    const sessionId = req.body.sessionId;
-    const blockNum = req.body.blockNum;
+    const session_id = req.body.session_id;
+    const block_num = req.body.block_num;
     const token = req.headers['x-access-token'];
-    const listOfTransactions = util.make_list_of_transactions_from_req_body(sessionId, blockNum, req.body.transactions);
-    const query = format(queries.add_transaction_query_template, listOfTransactions);
+    const list_of_transactions = util.make_list_of_transactions_from_req_body(session_id, block_num, req.body.transactions);
+    const query = format(queries.add_transaction_query_template, list_of_transactions);
     conn_pool.query(query)
         .then(results => {
             res.status(200).json({

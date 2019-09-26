@@ -21,13 +21,13 @@ function check_user_pass_data (req, res, next) {
 
 
 function check_setup_vars (req, res, next) {
-    if (req.body.walletNum != null && req.body.startingBalance != null && req.body.sessionId != null) next();
+    if (req.body.wallet_num != null && req.body.starting_balance != null && req.body.session_id != null) next();
     else return error_response(res, 401, "must specify session id, wallet num, starting balance", "Error in setup new session");
 }
 
 
 function check_trans_helper(body) {
-    if (body.sessionId == null || body.blockNum == null) return false;
+    if (body.session_id == null || body.block_num == null) return false;
     else if (body.transactions == null || typeof body.transactions !== 'object' || body.transactions.length === 0) {
         return false;
     }
@@ -37,15 +37,15 @@ function check_trans_helper(body) {
 
 function check_transaction_vars (req, res, next) {
     if (check_trans_helper(req.body)) next();
-    else return error_response(res, 401, "must specify sessionId, and list of transactions in form: {to: int, from: int, amount: int}", "error in adding transaction");
+    else return error_response(res, 401, "must specify session_id, and list of transactions in form: {to: int, from: int, amount: int}", "error in adding transaction");
 }
 
 
-function make_list_of_transactions_from_req_body(sessionId, blockNum, transactionList) {
-    let listOfTransactions = [];
-    let transNo = 0;
-    transactionList.forEach(trans => { listOfTransactions.push([sessionId, blockNum, transNo++, trans.from, trans.to, trans.amount]) });
-    return listOfTransactions;
+function make_list_of_transactions_from_req_body(session_id, block_num, transaction_list) {
+    let list_of_transactions = [];
+    let trans_no = 0;
+    transaction_list.forEach(trans => { list_of_transactions.push([session_id, block_num, trans_no++, trans.from, trans.to, trans.amount]) });
+    return list_of_transactions;
 }
 
 

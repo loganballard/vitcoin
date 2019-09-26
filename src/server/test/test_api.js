@@ -248,7 +248,7 @@ describe('/setUpScenario POST', () => {
             .post('/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({startingBalance: 10})
+            .send({starting_balance: 10})
             .end((err, res) => {
                 res.should.have.status(401);
                 done();
@@ -260,7 +260,7 @@ describe('/setUpScenario POST', () => {
             .post('/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({walletNum: 10})
+            .send({wallet_num: 10})
             .end((err, res) => {
                 res.should.have.status(401);
                 done();
@@ -272,7 +272,7 @@ describe('/setUpScenario POST', () => {
             .post('/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({walletNum: 10, startingBalance: 10})
+            .send({wallet_num: 10, starting_balance: 10})
             .end((err, res) => {
                 res.should.have.status(401);
                 done();
@@ -308,7 +308,7 @@ describe('/setUpScenario POST', () => {
             .post('/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({walletNum: 10, startingBalance: 10, sessionId: 1})
+            .send({wallet_num: 10, starting_balance: 10, session_id: 1})
             .end((err, res) => {
                 res.should.have.status(200);
                 done();
@@ -344,7 +344,7 @@ describe('/setUpScenario POST', () => {
             .post('/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({walletNum: 10, startingBalance: 10, sessionId: 1})
+            .send({wallet_num: 10, starting_balance: 10, session_id: 1})
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.wallets.should.have.property('length');
@@ -373,7 +373,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({blockNum: 0, transactions: [{to: 1, from: 1, amount: 1}]})
+            .send({block_num: 0, transactions: [{to: 1, from: 1, amount: 1}]})
             .end((err, res) => {
                 res.should.have.status(401);
                 done();
@@ -385,7 +385,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, transactions: [{to: 1, from: 1, amount: 1}]})
+            .send({session_id: 1, transactions: [{to: 1, from: 1, amount: 1}]})
             .end((err, res) => {
                 res.should.have.status(401);
                 done();
@@ -397,7 +397,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0})
+            .send({session_id: 1, block_num: 0})
             .end((err, res) => {
                 res.should.have.status(401);
             });
@@ -406,7 +406,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: ''})
+            .send({session_id: 1, block_num: 0, transactions: ''})
             .end((err, res) => {
                 res.should.have.status(401);
             });
@@ -415,7 +415,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: []})
+            .send({session_id: 1, block_num: 0, transactions: []})
             .end((err, res) => {
                 res.should.have.status(401);
             });
@@ -424,7 +424,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: [] })
+            .send({session_id: 1, block_num: 0, transactions: [] })
             .end((err, res) => {
                 res.should.have.status(401);
                 done();
@@ -437,7 +437,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: [{}] })
+            .send({session_id: 1, block_num: 0, transactions: [{}] })
             .end((err, res) => {
                 res.should.have.status(401);
             });
@@ -446,7 +446,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: [{}, {}] })
+            .send({session_id: 1, block_num: 0, transactions: [{}, {}] })
             .end((err, res) => {
                 res.should.have.status(401);
             });
@@ -455,7 +455,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: [{to: 1, from: 1, amount: 1}, {}] })
+            .send({session_id: 1, block_num: 0, transactions: [{to: 1, from: 1, amount: 1}, {}] })
             .end((err, res) => {
                 res.should.have.status(401);
             });
@@ -464,7 +464,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: [{to: 1, from: 1, amount: 1}, {} ] })
+            .send({session_id: 1, block_num: 0, transactions: [{to: 1, from: 1, amount: 1}, {} ] })
             .end((err, res) => {
                 res.should.have.status(401);
             });
@@ -473,7 +473,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: [{},{to: 1, from: 1, amount: 1} ] })
+            .send({session_id: 1, block_num: 0, transactions: [{},{to: 1, from: 1, amount: 1} ] })
             .end((err, res) => {
                 res.should.have.status(401);
             });
@@ -482,7 +482,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: [{to: 1, from: 1, amount: 1}, {to: 1, from: 1}, {from: 1, amount: 1}, {amount: 1}] })
+            .send({session_id: 1, block_num: 0, transactions: [{to: 1, from: 1, amount: 1}, {to: 1, from: 1}, {from: 1, amount: 1}, {amount: 1}] })
             .end((err, res) => {
                 res.should.have.status(401);
                 done();
@@ -520,7 +520,7 @@ describe('/addTransactions POST', () => {
             .post('/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({walletNum: 10, startingBalance: 10, sessionId: 1})
+            .send({wallet_num: 10, starting_balance: 10, session_id: 1})
             .end((err, res) => {
                 res.should.have.status(200);
             });
@@ -529,7 +529,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 0, transactions: [{to: 1, from: 1, amount: 1}] })
+            .send({session_id: 1, block_num: 0, transactions: [{to: 1, from: 1, amount: 1}] })
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.message.should.not.be.null;
@@ -541,7 +541,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 1, transactions: [{to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}] })
+            .send({session_id: 1, block_num: 1, transactions: [{to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}] })
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.message.should.not.be.null;
@@ -582,7 +582,7 @@ describe('/addTransactions POST', () => {
             .post('/setUpScenario')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({walletNum: 10, startingBalance: 10, sessionId: 1})
+            .send({wallet_num: 10, starting_balance: 10, session_id: 1})
             .end((err, res) => {
                 res.should.have.status(200);
             });
@@ -591,7 +591,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 1, transactions: [{to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}] })
+            .send({session_id: 1, block_num: 1, transactions: [{to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}, {to: 1, from: 1, amount: 1}] })
             .end((err, res) => {
                 res.should.have.status(500);
                 res.body.message.should.not.be.null;
@@ -602,7 +602,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 1, transactions: [{to: -1, from: 1, amount: 1}] })
+            .send({session_id: 1, block_num: 1, transactions: [{to: -1, from: 1, amount: 1}] })
             .end((err, res) => {
                 res.should.have.status(500);
                 res.body.message.should.not.be.null;
@@ -613,7 +613,7 @@ describe('/addTransactions POST', () => {
             .post('/addTransactions')
             .set('Content-Type', 'application/json')
             .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTY4NzQ3MTc0fQ.Bg_4iyndW_NojmO3dLpunxC-0MTPGHmDgOwpURE35hc')
-            .send({sessionId: 1, blockNum: 1, transactions: [{to: 100000, from: 1, amount: 1}] })
+            .send({session_id: 1, block_num: 1, transactions: [{to: 100000, from: 1, amount: 1}] })
             .end((err, res) => {
                 res.should.have.status(500);
                 res.body.message.should.not.be.null;
