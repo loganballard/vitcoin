@@ -12,24 +12,24 @@ CREATE TABLE users (
 */
 CREATE TABLE sessions (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(ID),
+    user_id INTEGER REFERENCES users(id),
     active BOOLEAN DEFAULT 't'
 );
 
 -- table to store transactional data (session + block + wallet <--> wallet)
-CREATE TABLE sessionBlockTransactions (
-    sessionId INTEGER REFERENCES sessions(id),
-    blockNum INTEGER NOT NULL,
-    transactionNum INTEGER NOT NULL,
-    fromWallet INTEGER references walletBalance(walletId),
-    toWallet INTEGER references walletBalance(walletId),
+CREATE TABLE session_block_transactions (
+    session_id INTEGER REFERENCES sessions(id),
+    block_num INTEGER NOT NULL,
+    transaction_num INTEGER NOT NULL,
+    from_wallet INTEGER references wallet_balance(wallet_id),
+    to_wallet INTEGER references wallet_balance(wallet_id),
     amount INTEGER NOT NULL,
-    PRIMARY KEY (sessionId, blockNum, transactionNum)
+    PRIMARY KEY (session_id, block_num, transaction_num)
 );
 
 -- table to store wallets and their balances
-CREATE TABLE walletBalance (
-    walletId SERIAL PRIMARY KEY,
-    sessionId INTEGER NOT NULL,
+CREATE TABLE wallet_balance (
+    wallet_id SERIAL PRIMARY KEY,
+    session_id INTEGER NOT NULL,
     balance INTEGER NOT NULL
 );
