@@ -2,12 +2,12 @@
   "name": "simple",
   "version": "1.0.0",
   "description": "as of right now, simple login app",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test-setup": "./src/server/test/init_test_db.sh",
     "test": "./src/server/test/init_test_db.sh; ./node_modules/.bin/mocha ./src/server/test --exit; docker rm -f test-api-in-container",
     "test-teardown": "docker rm -f test-api-in-container",
-    "start": "nodemon src/server/main/index.js"
+    "start": "nodemon src/server/main/app.js"
   },
   "author": "l",
   "license": "ISC",
