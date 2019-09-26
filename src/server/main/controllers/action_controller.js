@@ -1,5 +1,6 @@
 'use strict';
 
+
 function new_session(req, res) {
     console.log("successfully created new session");
     res.status(200).json({

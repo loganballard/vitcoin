@@ -1,8 +1,7 @@
 'use strict';
-
 let router = require('express').Router();
-const util = require('../util');
-const db = require('../db_access');
+const util = require('../util/util_functions');
+const db = require('../util/db_access');
 const action_controller = require('../controllers/action_controller');
 
 router.post('/newSession', util.verify_token, db.create_new_session, action_controller.new_session);

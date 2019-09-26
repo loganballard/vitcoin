@@ -1,11 +1,10 @@
 'use strict';
-
 const Pool = require('pg').Pool;
 const bcrypt = require('bcrypt');
 const format = require('pg-format');
-const util = require('./util');
-const queries = require('../../db/queries');
-const config = (process.env.NODE_ENV === 'test') ? require('./config/test_config') : require('./config/config');
+const util = require('./util_functions');
+const queries = require('../../../db/queries');
+const config = (process.env.NODE_ENV === 'test') ? require('../config/test_config') : require('../config/config');
 const conn_pool = new Pool({
    user: config.db_username,
    password: config.db_password,

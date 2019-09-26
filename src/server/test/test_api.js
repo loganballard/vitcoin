@@ -5,7 +5,6 @@ const chai_http = require('chai-http');
 const should = chai.should();
 
 let app = require('../main/app');
-
 chai.use(chai_http);
 
 
