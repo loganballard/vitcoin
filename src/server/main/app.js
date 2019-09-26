@@ -36,7 +36,7 @@ app.post('/setUpScenario', json_parser, util.verify_token, util.check_setup_vars
     res.send();
 });
 
-app.post('/addTransactions', json_parser, util.verify_token, util.check_transaction_vars, db.add_transaction_to_db, (req, res) => {
+app.post('/addTransactions', json_parser, util.verify_token, util.check_transaction_vars, db.add_transaction_to_db, db.update_wallet_balance, (req, res) => {
     res.send();
 });
 

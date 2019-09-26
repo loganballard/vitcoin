@@ -106,15 +106,11 @@ exports.add_wallets_to_db = function (req, res, next) {
 exports.add_transaction_to_db = function (req, res, next) {
     const session_id = req.body.session_id;
     const block_num = req.body.block_num;
-    const token = req.headers['x-access-token'];
     const list_of_transactions = util.make_list_of_transactions_from_req_body(session_id, block_num, req.body.transactions);
     const query = format(queries.add_transaction_query_template, list_of_transactions);
     conn_pool.query(query)
         .then(results => {
-            res.status(200).json({
-                token: token,
-                message: "successfully added transaction(s)!"
-            });
+            res.locals.trans_list = list_of_transactions;
             next();
         })
         .catch(err => { util.error_response(res, 500, "Database error adding transaction information", err) });
@@ -122,5 +118,16 @@ exports.add_transaction_to_db = function (req, res, next) {
 
 
 exports.update_wallet_balance = function (req, res, next) {
-
+    const token = req.headers['x-access-token'];
+    const wallet_adjustment_list = util.get_transaction_difference(res.locals.trans_list);
+    const query = format(queries.update_wallet_balance_template, wallet_adjustment_list);
+    conn_pool.query(query)
+        .then(results => {
+            res.status(200).json({
+                token: token,
+                message: "successfully updated wallet balance and added transaction(s)!"
+            });
+            next();
+        })
+        .catch(err => { util.error_response(res, 500, "Database error updating wallet information", err) });
 };

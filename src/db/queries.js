@@ -6,12 +6,12 @@ const add_transaction_query_template = "" +
     "INSERT INTO session_block_transactions (session_id, block_num, transaction_num, from_wallet, to_wallet, amount) " +
     "VALUES %L";
 const update_wallet_balance_template = "" +
-    "UPDATE wallet_balance AS wB SET" +
-    "   balance = wB.balance + up.balance" +
+    "UPDATE wallet_balance AS wB SET " +
+    "balance = wB.balance + up.balance::INTEGER " +
     "FROM (VALUES " +
-    "       %L " +
+    "%L" +
     ") AS up(wallet_id, balance) " +
-    "WHERE wB.wallet_id = up.wallet_id;";
+    "WHERE wB.wallet_id = up.wallet_id::INTEGER;";
 
 module.exports = {
     login_query,

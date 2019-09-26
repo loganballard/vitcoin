@@ -49,6 +49,29 @@ function make_list_of_transactions_from_req_body(session_id, block_num, transact
 }
 
 
+// TODO - refactor this garbage
+function get_transaction_difference(list_of_trans) {
+    let trans_map = {};
+    let trans_list = [];
+    let to_wallet = 0;
+    let from_wallet = 0;
+    let amount = 0;
+    list_of_trans.forEach(trans => {
+        from_wallet = trans[3];
+        to_wallet = trans[4];
+        amount = trans[5];
+        if (!trans_map.hasOwnProperty(from_wallet)) trans_map[from_wallet] = 0 - amount;
+        else trans_map[from_wallet] = trans_map[from_wallet] - amount;
+        if (!trans_map.hasOwnProperty(to_wallet)) trans_map[to_wallet] = amount;
+        else trans_map[to_wallet] = trans_map[to_wallet] + amount;
+    });
+    Object.entries(trans_map).forEach(trans_entry => {
+        trans_list.push([parseInt(trans_entry[0]), trans_entry[1]]);
+    });
+    return trans_list;
+}
+
+
 function issue_token (req, res, next) {
     let token = jwt.sign({id: req.body.id}, config.jwt_key);
     res.status(200).json({
@@ -75,6 +98,7 @@ module.exports = {
     check_setup_vars,
     check_transaction_vars,
     make_list_of_transactions_from_req_body,
+    get_transaction_difference,
     check_user_pass_data,
     issue_token,
     verify_token
