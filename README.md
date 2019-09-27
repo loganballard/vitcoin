@@ -14,15 +14,26 @@ As of right now this is just a shitty login express js backend.  Need to do a bu
 
 ## To Test
 MacOS/Linux:
+0. Ensure that docker is installed
 1. `npm test`
 
 Windows: 
+0. Ensure that docker is installed
 1. Spin up a docker instance according to the script in `./src/server/main/test/init_test_db.sh` (this sucks I know)
 2. `./node_modules/.bin/mocha  ./src/server/test --exit`
-3. `npm run-script test-teardown`
+3. `npm run test-teardown`
 4. Contemplate why windows has stupid powershell
 
 ## To do
 
-1. create react front end
+1. create react/vue(?) front end
+    - login page
+    - setup page
+    - running page
+        - figure out how to do "mining" in js
+    - results page
 2. define more api logic
+    - Add ability to do "mining"
+    - record "winning" a mining block
+    - add aliases to wallets
+    - add persistence to wallets
