@@ -9,6 +9,8 @@ const action_router = require('./routes/action_route');
 const app = express();
 const port = 3000;
 const log_level = (process.env.NODE_ENV === 'test' ) ? false : (process.env.NODE_ENV === 'dev') ? 'dev' : 'combined';
+const config = (process.env.NODE_ENV === 'test') ? require('./config/test_config') : require('./config/config');
+
 
 let router = express.Router();
 let access_log_stream = null;
@@ -17,7 +19,7 @@ app.use(json_parser);
 if (log_level === 'dev') {
     app.use(morgan(log_level));
 } else if (log_level === 'combined') {
-    access_log_stream = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), { flags: 'a' });
+    access_log_stream = fs.createWriteStream(path.join(config.log_dir, 'access.log'), { flags: 'a' });
     app.use(morgan(log_level, { stream: access_log_stream }));
 }
 app.use('/', router);

@@ -5,5 +5,6 @@ module.exports = {
     db_database: "api",
     db_port: 5432,
     salt_rounds: 10,
-    jwt_key: "asdf"
-}
+    jwt_key: "asdf",
+    log_dir: "."
+};
