@@ -15,7 +15,7 @@ function check_user_pass_data (req, res, next) {
     let user = req.body.user;
     let plain_password = req.body.password;
     if (user != null && plain_password != null) next();
-    else return error_response(res, 401, "username or password not supplied", null);
+    else return error_response(res, 401, "username or password not supplied", "username or password not supplied");
 }
 
 
