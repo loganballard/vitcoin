@@ -7,7 +7,7 @@ const path = require('path');
 const acct_router = require('./routes/account_route');
 const action_router = require('./routes/action_route');
 const app = express();
-const port = 3000;
+const port = 3001;
 const log_level = (process.env.NODE_ENV === 'test' ) ? false : (process.env.NODE_ENV === 'dev') ? 'dev' : 'combined';
 const config = (process.env.NODE_ENV === 'test') ? require('./config/test_config') : require('./config/config');
 

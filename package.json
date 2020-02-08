@@ -4,10 +4,15 @@
   "description": "as of right now, simple login app",
   "main": "app.js",
   "scripts": {
-    "test-setup": "./src/server/test/init_test_db.sh",
-    "test": "./src/server/test/init_test_db.sh; ./node_modules/.bin/mocha ./src/server/test --exit; docker rm -f test-api-in-container",
+    "test-setup": "./backend/server/test/init_test_db.sh",
+    "test": "./backend/server/test/init_test_db.sh; ./node_modules/.bin/mocha ./src/server/test --exit; docker rm -f test-api-in-container",
     "test-teardown": "docker rm -f test-api-in-container",
-    "start": "nodemon src/server/main/app.js"
+    "start-client": "react-scripts start",
+    "start-server": "nodemon ./backend/server/main/app.js",
+    "start": "run-p start-server start-client",
+    "build-client": "react-scripts build",
+    "test-client": "react-scripts test",
+    "eject-client": "react-scripts eject"
   },
   "author": "l",
   "license": "ISC",
@@ -18,12 +23,28 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.2",
+    "npm-run-all": "^4.1.5",
     "pg": "^7.12.1",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.3.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
